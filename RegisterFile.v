@@ -27,8 +27,8 @@ module RegisterFile(input	reset,
       rf[2] = 32'h2ffc; // stack pointer
     end
     else begin
-      if(!write_enable) begin 
-        rf[rd] = rd_din;
+      if(write_enable == 1) begin 
+        rf[rd] <= rd_din;
       end
     end
   end

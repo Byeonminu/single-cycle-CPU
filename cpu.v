@@ -25,14 +25,28 @@ module CPU(input reset,       // positive reset signal
   wire [31:0] rd_din,     
   wire write_enable,        
   wire [31:0] rs1_dout,  
-  wire [31:0] rs2_dout); // 해야할 것: type마다 rs1, rs2 rd의 값을 정해줘야함! 그것은 어떤 모듈에서 해야할까?
+  wire [31:0] rs2_dout); 
   //Control Unit
 
   //Immediate Generator
   wire [31:0] imm_gen_out;
   //ALU Control Unit
   wire [1:0] alu_op;
-
+  //ALU
+  wire [31:0] alu_result;
+  //Data Memory
+  wire mem_read;
+  wire mem_write;
+  //Control Unit
+  wire alu_src;
+  wire mem_to_reg;
+  // ---------------------------------------------------------------------------
+  assign next_pc = current_pc + 4;
+  assign rs1 = instruction[19 : 15];
+  assign rs2 = instruction[24 : 20];
+  assign rd = instruction[11 : 7]; 
+  assign rs2_dout = (alu_src == 0) ? rs2_dout : imm_gen_out;
+  assign rd_din = (mem_to_reg == 1) ? rd_din : rs2_dout;
 
   // ---------- Update program counter ----------
   // PC must be updated on the rising edge (positive edge) of the clock.
@@ -97,7 +111,7 @@ module CPU(input reset,       // positive reset signal
     .alu_op(alu_op),      // input
     .alu_in_1(rs1_dout),    // input  
     .alu_in_2(rs2_dout),    // input
-    .alu_result(),  // output
+    .alu_result(alu_result),  // output
     .alu_bcond()     // output
   );
 
@@ -106,9 +120,9 @@ module CPU(input reset,       // positive reset signal
     .reset (reset),      // input
     .clk (clk),        // input
     .addr (alu_result),       // input
-    .din (),        // input
-    .mem_read (),   // input
-    .mem_write (),  // input
-    .dout ()        // output
+    .din (rs2_dout),        // input
+    .mem_read (mem_read),   // input
+    .mem_write (mem_write),  // input
+    .dout (rd_din)        // output
   );
 endmodule
