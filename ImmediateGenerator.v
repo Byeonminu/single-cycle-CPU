@@ -18,8 +18,6 @@ case(part_of_inst[6:0])
 `XORI: imm_gen_out <= {{{20}{part_of_inst[31]}},part_of_inst[31:20]};
 `ORI: imm_gen_out <= {{{20}{part_of_inst[31]}},part_of_inst[31:20]};
 `ANDI: imm_gen_out <= {{{20}{part_of_inst[31]}},part_of_inst[31:20]};
-`SLLI: imm_gen_out <= {{{20}{part_of_inst[31]}},part_of_inst[31:20]}; //shmat는 뭐지?
-`SRLI: imm_gen_out <= {{{20}{part_of_inst[31]}},part_of_inst[31:20]}; //shmat는 뭐지?
 default : imm_gen_out <= {32{1'h0}}; // ADD, SUB, SLL, XOR, SRL, OR, AND
 
 
