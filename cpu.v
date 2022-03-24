@@ -14,7 +14,7 @@
 `include "RegisterFile.v"
 `include "opcodes.v"
 `include "Memory.v"
-
+`include "control_unit.v"
 
 
 module CPU(input reset,       // positive reset signal
@@ -25,6 +25,7 @@ module CPU(input reset,       // positive reset signal
   //PC
   wire [31:0] next_pc;
   wire [31:0] current_pc;
+  wire [31:0] jump_pc;
   //Instruction Memory
   wire [31:0] instruction;
   //Register File
@@ -35,7 +36,9 @@ module CPU(input reset,       // positive reset signal
   wire write_enable;        
   wire [31:0] rs1_dout;  
   wire [31:0] rs2_dout;
-  wire [31:0] rs2_dout_temp; 
+  wire [31:0] rs2_dout_mux1;
+  wire [31:0] rd_din_mux1;
+  wire [31:0] rd_din_mux0;
   //Control Unit
 
   //Immediate Generator
@@ -49,17 +52,36 @@ module CPU(input reset,       // positive reset signal
   wire mem_read;
   wire mem_write;
   //Control Unit
+  wire is_jal;
+  wire is_jalr;
+  wire branch;
   wire alu_src;
   wire mem_to_reg;
+  wire pc_to_reg;
   // Data Memory
   // ---------------------------------------------------------------------------
-  assign next_pc = current_pc + 4; //보류
+  assign jump_pc = current_pc + 4; //보류
   assign rs1 = instruction[19 : 15];
   assign rs2 = instruction[24 : 20];
   assign rd = instruction[11 : 7]; 
-  assign rs2_dout_temp = (alu_src == 0) ? rs2_dout : imm_gen_out; 
-  assign rd_din = (mem_to_reg == 1) ? rd_din : alu_result;
+  assign rs2_dout_mux1 = (alu_src == 0) ? rs2_dout : imm_gen_out;
 
+  // pc_to_reg 
+  assign rd_din_mux0 = (mem_to_reg == 1) ? rd_din : alu_result;
+  assign rd_din_mux1 = jump_pc;
+  assign rd_din = (pc_to_reg == 1) ? rd_din_mux1 : rd_din_mux0;
+
+  // branch
+  wire pc_src1; 
+  wire pc_src2;
+
+  assign pc_src1 = (branch & alu_bcond ) | is_jal;
+  assign pr_src2 = is_jalr;
+  
+  assign next_pc = (pc_src2 == 1) ? alu_result : ( (pc_src1 == 1) ? (imm_gen_out + current_pc) : jump_pc );
+
+
+  assign is_halted = (reg_file.rf[17] == 10 & instruction[6:0] == 7'b1110011) ? 1 : 0;
   // ---------- Update program counter ----------
   // PC must be updated on the rising edge (positive edge) of the clock.
   PC pc(
@@ -87,24 +109,22 @@ module CPU(input reset,       // positive reset signal
     .rd_din (rd_din),       // input
     .write_enable (write_enable),    // input
     .rs1_dout (rs1_dout),     // output
-    .rs2_dout (rs2_dout),     // output
-    .is_halted (is_halted)      // output
+    .rs2_dout (rs2_dout)    // output
   );
 
 
   // ---------- Control Unit ----------
   ControlUnit ctrl_unit (
-    .part_of_inst(),  // input
-    .is_jal(),        // output
-    .is_jalr(),       // output
-    .branch(),        // output
-    .mem_read(),      // output
-    .mem_to_reg(),    // output
-    .mem_write(),     // output
-    .alu_src(),       // output
-    .write_enable(),     // output
-    .pc_to_reg(),     // output
-    .is_ecall()       // output (ecall inst)
+    .part_of_inst(instruction),  // input
+    .is_jal(is_jal),        // output
+    .is_jalr(is_jalr),       // output
+    .branch(branch),        // output
+    .mem_read(mem_read),      // output
+    .mem_to_reg(mem_to_reg),    // output
+    .mem_write(mem_write),     // output
+    .alu_src(alu_src),       // output
+    .write_enable(write_enable),     // output
+    .pc_to_reg(pc_to_reg)     // output
   );
 
   // ---------- Immediate Generator ----------
@@ -123,7 +143,7 @@ module CPU(input reset,       // positive reset signal
   ALU alu (
     .alu_op(alu_op),      // input
     .alu_in_1(rs1_dout),    // input  
-    .alu_in_2(rs2_dout_temp),    // input
+    .alu_in_2(rs2_dout_mux1),    // input
     .alu_result(alu_result),  // output
     .alu_bcond(alu_bcond)     // output
   );

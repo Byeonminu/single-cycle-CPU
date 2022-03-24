@@ -6,7 +6,7 @@ module ImmediateGenerator (input [31:0] part_of_inst,
 
 
 always @(*) begin
-    $display("ImmediateGenerator");
+$display("ImmediateGenerator");
 case(part_of_inst[6:0])
 `JAL: imm_gen_out <= {{20{part_of_inst[31]}},part_of_inst[31],part_of_inst[19:12],part_of_inst[20],part_of_inst[30:21]};
 `JALR: imm_gen_out <= {{20{part_of_inst[31]}},part_of_inst[31:20]};

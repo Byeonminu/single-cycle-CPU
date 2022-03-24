@@ -41,51 +41,50 @@ module ALUControlUnit (input [31:0] part_of_inst,
 
 wire [2:0] funct3;
 wire inst30;
-wire [1:0] aluop;
+reg [1:0] aluop;
 
 assign funct3 = part_of_inst[14:12];
 assign inst30 = part_of_inst[30];
 
 always @(*) begin
 case(part_of_inst[6:0])
-7'b0110011 : aluop <= 2'b10; // R-type
-7'b0000011 : aluop <= 2'b00; // lw-type
-7'b0100011 : aluop <= 2'b00; // s-type
-7'b1100011 : aluop <= 2'b01; // sb-type
-7'b0010011 : aluop <= 2'b11; // I-type
-7'b1100111 : aluop <= 2'b00; // jalr-type
-7'b1101111 : aluop <= 2'b00; // jal-type
-default : aluop    <= 2'bxx;
+7'b0110011 : aluop = 2'b10; // R-type
+7'b0000011 : aluop = 2'b00; // lw-type
+7'b0100011 : aluop = 2'b00; // s-type
+7'b1100011 : aluop = 2'b01; // sb-type
+7'b0010011 : aluop = 2'b11; // I-type
+7'b1100111 : aluop = 2'b00; // jalr-type
+7'b1101111 : aluop = 2'b00; // jal-type
+default : aluop    = 2'bxx;
 endcase
 end
 
 always @(*) begin
-	case(aluop) begin
-		2'b00 : Control <= 4'b0010;
-		2'b01 : Control <= 4'b0110; 
+	case(aluop)
+		2'b00 : alu_op <= 4'b0010;
+		2'b01 : alu_op <= 4'b0110; 
 		2'b10 : case({inst30,funct3})
-		4'b0000 : Control <= 4'b0010; // add
-		4'b1000 : Control <= 4'b0110; // sub
-		4'b0111 : Control <= 4'b0000; // and
-		4'b0110 : Control <= 4'b0001; // or
-		4'b0001 : Control <= 4'b0011; // sll
-		4'b0100 : Control <= 4'b0111; // xor
-		4'b0101 : Control <= 4'b1000; // srl
-		default : Control <= 4'bxxxx;
+		4'b0000 : alu_op <= 4'b0010; // add
+		4'b1000 : alu_op <= 4'b0110; // sub
+		4'b0111 : alu_op <= 4'b0000; // and
+		4'b0110 : alu_op <= 4'b0001; // or
+		4'b0001 : alu_op <= 4'b0011; // sll
+		4'b0100 : alu_op <= 4'b0111; // xor
+		4'b0101 : alu_op <= 4'b1000; // srl
+		default : alu_op <= 4'bxxxx;
 		endcase
 		2'b11 : case(funct3) // 애매함 
-		3'b000 : Control <= 4'b0010; // addi
-		3'b100 : Control <= 4'b0111; // xori
-		3'b110 : Control <= 4'b0001; // ori
-		3'b111 : Control <= 4'b0000; // andi
-		3'b001 : Control <= 4'b0011; // slli
-		3'b101 : Control <= 4'b1000; // srli
-		default : Control <= 4'bxxxx;
+		3'b000 : alu_op <= 4'b0010; // addi
+		3'b100 : alu_op <= 4'b0111; // xori
+		3'b110 : alu_op <= 4'b0001; // ori
+		3'b111 : alu_op <= 4'b0000; // andi
+		3'b001 : alu_op <= 4'b0011; // slli
+		3'b101 : alu_op <= 4'b1000; // srli
+		default : alu_op <= 4'bxxxx;
 	endcase
 endcase
 end
 	
-end
 
 endmodule
 
