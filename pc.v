@@ -13,7 +13,9 @@ output reg [31: 0] current_pc;
     always@(negedge clk) begin
         if(!reset)
             current_pc <= 32'h0000;
-        else
+        else begin
+            $display("pc");
             current_pc <= next_pc;
+        end
     end
 endmodule

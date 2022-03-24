@@ -8,13 +8,19 @@
 // 3. You might need to describe combinational logics to drive them into the module (e.g., mux, and, or, ...)
 // 4. `include files if required
 
+`include "pc.v"
+`include "alu.v"
+`include "ImmediateGenerator.v"
+`include "RegisterFile.v"
+`include "opcodes.v"
+`include "Memory.v"
+
+
+
 module CPU(input reset,       // positive reset signal
            input clk,         // clock signal
            output is_halted); // Whehther to finish simulation
   
-  initial begin
-    is_halted = 1'b0;
-  end
 
   //PC
   wire [31:0] next_pc;
@@ -22,12 +28,12 @@ module CPU(input reset,       // positive reset signal
   //Instruction Memory
   wire [31:0] instruction;
   //Register File
-  wire [4:0] rs1,          
-  wire [4:0] rs2,          
-  wire [4:0] rd,         
-  wire [31:0] rd_din,     
-  wire write_enable,        
-  wire [31:0] rs1_dout,  
+  wire [4:0] rs1;          
+  wire [4:0] rs2;          
+  wire [4:0] rd;        
+  wire [31:0] rd_din;     
+  wire write_enable;        
+  wire [31:0] rs1_dout;  
   wire [31:0] rs2_dout;
   wire [31:0] rs2_dout_temp; 
   //Control Unit
@@ -35,10 +41,10 @@ module CPU(input reset,       // positive reset signal
   //Immediate Generator
   wire [31:0] imm_gen_out;
   //ALU Control Unit
-  wire [1:0] alu_op;
+  wire [3:0] alu_op;
   //ALU
   wire [31:0] alu_result;
-  wire [2:0] alu_bcond;
+  wire alu_bcond;
   //Data Memory
   wire mem_read;
   wire mem_write;
@@ -81,25 +87,25 @@ module CPU(input reset,       // positive reset signal
     .rd_din (rd_din),       // input
     .write_enable (write_enable),    // input
     .rs1_dout (rs1_dout),     // output
-    .rs2_dout (rs2_dout),
+    .rs2_dout (rs2_dout),     // output
     .is_halted (is_halted)      // output
   );
 
 
-  // // ---------- Control Unit ----------
-  // ControlUnit ctrl_unit (
-  //   .part_of_inst(),  // input
-  //   .is_jal(),        // output
-  //   .is_jalr(),       // output
-  //   .branch(),        // output
-  //   .mem_read(),      // output
-  //   .mem_to_reg(),    // output
-  //   .mem_write(),     // output
-  //   .alu_src(),       // output
-  //   .write_enable(),     // output
-  //   .pc_to_reg(),     // output
-  //   .is_ecall()       // output (ecall inst)
-  // );
+  // ---------- Control Unit ----------
+  ControlUnit ctrl_unit (
+    .part_of_inst(),  // input
+    .is_jal(),        // output
+    .is_jalr(),       // output
+    .branch(),        // output
+    .mem_read(),      // output
+    .mem_to_reg(),    // output
+    .mem_write(),     // output
+    .alu_src(),       // output
+    .write_enable(),     // output
+    .pc_to_reg(),     // output
+    .is_ecall()       // output (ecall inst)
+  );
 
   // ---------- Immediate Generator ----------
   ImmediateGenerator imm_gen(
