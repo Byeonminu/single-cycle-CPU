@@ -33,7 +33,7 @@ module CPU(input reset,       // positive reset signal
   wire [4:0] rs2;          
   wire [4:0] rd;        
   wire [31:0] rd_din;     
-  wire write_enable;        
+  wire reg_write;        
   wire [31:0] rs1_dout;  
   wire [31:0] rs2_dout;
   wire [31:0] rs2_dout_mux1;
@@ -60,7 +60,7 @@ module CPU(input reset,       // positive reset signal
   wire pc_to_reg;
   // Data Memory
   // ---------------------------------------------------------------------------
-  assign jump_pc = current_pc + 4; //보류
+  assign jump_pc = current_pc + 4; 
   assign rs1 = instruction[19 : 15];
   assign rs2 = instruction[24 : 20];
   assign rd = instruction[11 : 7]; 
@@ -75,13 +75,17 @@ module CPU(input reset,       // positive reset signal
   wire pc_src1; 
   wire pc_src2;
 
-  assign pc_src1 = (branch & alu_bcond ) | is_jal;
+  assign pc_src1 = (branch & alu_bcond) | is_jal;
   assign pr_src2 = is_jalr;
   
   assign next_pc = (pc_src2 == 1) ? alu_result : ( (pc_src1 == 1) ? (imm_gen_out + current_pc) : jump_pc );
 
 
   assign is_halted = (reg_file.rf[17] == 10 & instruction[6:0] == 7'b1110011) ? 1 : 0;
+
+  
+
+  
   // ---------- Update program counter ----------
   // PC must be updated on the rising edge (positive edge) of the clock.
   PC pc(
@@ -107,7 +111,7 @@ module CPU(input reset,       // positive reset signal
     .rs2 (rs2),          // input
     .rd (rd),           // input
     .rd_din (rd_din),       // input
-    .write_enable (write_enable),    // input
+    .reg_write (reg_write),    // input
     .rs1_dout (rs1_dout),     // output
     .rs2_dout (rs2_dout)    // output
   );
@@ -123,7 +127,7 @@ module CPU(input reset,       // positive reset signal
     .mem_to_reg(mem_to_reg),    // output
     .mem_write(mem_write),     // output
     .alu_src(alu_src),       // output
-    .write_enable(write_enable),     // output
+    .reg_write(reg_write),     // output
     .pc_to_reg(pc_to_reg)     // output
   );
 
@@ -159,3 +163,44 @@ module CPU(input reset,       // positive reset signal
     .dout (rd_din)        // output
   );
 endmodule
+
+
+
+
+
+
+        // assign next_pc = 32'b0;
+        
+        // assign jump_pc = 32'b0;
+        // //Instruction Memory
+        // assign instruction =32'b0;
+        // //Register File
+        // assign rs1 = 5'b0;        
+        // assign rs2 = 5'b0;   
+        // assign rd = 5'b0;      
+        // assign rd_din = 32'b0;     
+        // assign reg_write = 1'b0;        
+        // assign   rs1_dout = 32'b0;  
+        //  assign  rs2_dout = 32'b0;  
+        //  assign  rs2_dout_mux1 = 32'b0;  
+        //  assign  rd_din_mux1 = 32'b0;  
+        //  assign  rd_din_mux0 = 32'b0;  
+        // //Control Unit
+
+        // //Immediate Generator
+        //  assign imm_gen_out = 32'b0;
+        // //ALU Control Unit
+        //  assign alu_op =4'b0;
+        // //ALU
+        // assign alu_result =32'b0;
+        // assign  alu_bcond = 1'b0;
+        // //Data Memory
+        // assign mem_read = 1'b0;
+        // assign  mem_write = 1'b0;
+        // //Control Unit
+        //  assign is_jal = 1'b0;
+        //  assign  is_jalr= 1'b0;
+        //  assign branch = 1'b0;
+        //  assign alu_src = 1'b0;
+        //  assign mem_to_reg = 1'b0;
+        //  assign pc_to_reg = 1'b0;

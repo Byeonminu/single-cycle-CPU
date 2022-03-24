@@ -4,7 +4,7 @@ module RegisterFile(input	reset,
                     input [4:0] rs2,          // source register 2
                     input [4:0] rd,           // destination register
                     input [31:0] rd_din,      // input data for rd
-                    input write_enable,        // RegWrite signal
+                    input reg_write,        // RegWrite signal
                     output [31:0] rs1_dout,   // output of rs 1
                     output [31:0] rs2_dout);
   // Register file
@@ -28,9 +28,8 @@ module RegisterFile(input	reset,
       rf[2] = 32'h2ffc; // stack pointer
     end
     else begin
-       $display("registerfile");
-      if(write_enable == 1) begin 
-        rf[rd] = rd_din;
+      if(reg_write == 1) begin 
+        rf[rd] <= rd_din;
       end
     end
   end
