@@ -51,6 +51,7 @@ module CPU(input reset,       // positive reset signal
   //Data Memory
   wire mem_read;
   wire mem_write;
+  wire [31:0] read_data;
   //Control Unit
   wire is_jal;
   wire is_jalr;
@@ -67,22 +68,36 @@ module CPU(input reset,       // positive reset signal
   assign rs2_dout_mux1 = (alu_src == 0) ? rs2_dout : imm_gen_out;
 
   // pc_to_reg 
-  assign rd_din_mux0 = (mem_to_reg == 1) ? rd_din : alu_result;
+  MUX rd_din_low(
+                 .a(alu_result),
+                 .b(read_data),
+                 .condition(mem_to_reg),
+                 .out(rd_din_mux0) );
+  MUX rd_din_high(
+                 .a(rd_din_mux0),
+                 .b(rd_din_mux1),
+                 .condition(pc_to_reg),
+                 .out(rd_din) );
   assign rd_din_mux1 = jump_pc;
-  assign rd_din = (pc_to_reg == 1) ? rd_din_mux1 : rd_din_mux0;
-
+  
+  always @(next_pc) begin
+    $display("next_pc %x", next_pc);
+  end
+  
   // branch
   wire pc_src1; 
-  wire pc_src2;
+  // wire pc_src2;
 
   assign pc_src1 = (branch & alu_bcond) | is_jal;
-  assign pr_src2 = is_jalr;
   
-  assign next_pc = (pc_src2 == 1) ? alu_result : ( (pc_src1 == 1) ? (imm_gen_out + current_pc) : jump_pc );
+  assign next_pc = (is_jalr == 1) ? alu_result : ( (pc_src1 == 1) ? (imm_gen_out + current_pc) : jump_pc );
 
 
   assign is_halted = (reg_file.rf[17] == 10 & instruction[6:0] == 7'b1110011) ? 1 : 0;
 
+  always @(reg_file.rf[0]) begin
+    $display("reg_file.rf[17] is %x", reg_file.rf[17]);
+  end
   
 
   
@@ -160,7 +175,7 @@ module CPU(input reset,       // positive reset signal
     .din (rs2_dout),        // input
     .mem_read (mem_read),   // input
     .mem_write (mem_write),  // input
-    .dout (rd_din)        // output
+    .dout (read_data)        // output
   );
 endmodule
 

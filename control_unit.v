@@ -17,12 +17,25 @@ case(part_of_inst[6:0])
 7'b1101111 : control <= 9'b111xx0101; // jal-type
 default : control    <= 9'bxxxxxxxxx;
 endcase
-end
-
-always @(part_of_inst) begin
- $display("%b", part_of_inst);
 
 end
+
+// always @(part_of_inst) begin
+//  $display("ControlUnit %x", part_of_inst);
+
+// end
  
 
+endmodule
+
+
+
+module MUX (input [31 : 0] a, b,
+            input  condition,
+            output reg [31 : 0] out);
+
+always @(condition or a or b) begin
+
+  out = (condition == 1'b0) ? a : b;
+end 
 endmodule

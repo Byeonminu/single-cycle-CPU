@@ -10,7 +10,8 @@ module ALU (input [31:0] alu_in_1,
 	assign alu_bcond = (alu_result == 0) ? 1 : 0 ;
 
 always@(*) begin
-	$display("ALU");
+	
+	$display("ALU alu_op %b", alu_op);	
 	case(alu_op)
 	4'b0000: alu_result = alu_in_1 & alu_in_2; // AND
 	4'b0001: alu_result = alu_in_1 | alu_in_2; // OR
@@ -19,7 +20,7 @@ always@(*) begin
 	4'b0011: alu_result = alu_in_1 << alu_in_2; // sll
 	4'b0111: alu_result = alu_in_1 ^ alu_in_2; // xor
 	4'b1000: alu_result = alu_in_1 >> alu_in_2; // srl
-	default: alu_result = {32{1'bx}};
+	default: alu_result = {32{1'bx}};	
 	endcase
 
 /* `define FUNCT3_ADD      3'b000
@@ -73,7 +74,7 @@ always @(*) begin
 		4'b0101 : alu_op <= 4'b1000; // srl
 		default : alu_op <= 4'bxxxx;
 		endcase
-		2'b11 : case(funct3) // 애매함 
+		2'b11 : case(funct3) 
 		3'b000 : alu_op <= 4'b0010; // addi
 		3'b100 : alu_op <= 4'b0111; // xori
 		3'b110 : alu_op <= 4'b0001; // ori
@@ -83,6 +84,10 @@ always @(*) begin
 		default : alu_op <= 4'bxxxx;
 	endcase
 endcase
+end
+
+always @(part_of_inst) begin
+	$display("ALUControlUnit %x", part_of_inst);
 end
 	
 

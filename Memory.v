@@ -20,34 +20,7 @@ module InstMemory #(parameter MEM_DEPTH = 1024) (input reset,
       for (i = 0; i < MEM_DEPTH; i = i + 1)
           mem[i] = 32'b0;
       // Provide path of the file including instructions with binary format
-        mem[0] = 32'hfe010113;
-        mem[1] = 32'h00112e23;
-        mem[2] = 32'h00812c23;
-        mem[3] = 32'h02010413;
-        mem[4] = 32'h01300793;
-        mem[5] = 32'hfef42623;
-        mem[6] = 32'h00e00793;
-        mem[7] = 32'hfef42423;
-        mem[8] = 32'hfe842583;
-        mem[9] = 32'hfec42503;
-        mem[10] = 32'hfea42223;
-        mem[11] = 32'hfe442703;
-        mem[12] = 32'hfec42783;
-        mem[13] = 32'h00f707b3;
-        mem[14] = 32'h00a06813;
-        mem[15] = 32'h00200893;
-        mem[16] = 32'h011818b3;
-        mem[17] = 32'h00300593;
-        mem[18] = 32'h00b8f6b3;
-        mem[19] = 32'hfff8c613;
-        mem[20] = 32'h41088833;
-        mem[21] = 32'h0038d893;
-        mem[22] = 32'h00f766b3;
-        mem[23] = 32'h01c12083;
-        mem[24] = 32'h01812403;
-        mem[25] = 32'h02010113;
-        mem[26] = 32'h00a00893;
-        mem[27] = 32'h00000073;
+       $readmemh("loop_mem.txt", mem);
     end
   end
 
@@ -89,6 +62,41 @@ module DataMemory #(parameter MEM_DEPTH = 16384) (input reset,
       end
     end
   end
+
+  always @(addr) begin
+    $display("DataMemory addr %x", addr);
+  end
 endmodule
 
 
+
+
+
+ // mem[0] = 32'hfe010113; 
+        // mem[1] = 32'h00112e23; 
+        // mem[2] = 32'h00812c23;
+        // mem[3] = 32'h02010413;
+        // mem[4] = 32'h01300793;
+        // mem[5] = 32'hfef42623;
+        // mem[6] = 32'h00e00793;
+        // mem[7] = 32'hfef42423;
+        // mem[8] = 32'hfe842583;
+        // mem[9] = 32'hfec42503;
+        // mem[10] = 32'hfea42223;
+        // mem[11] = 32'hfe442703;
+        // mem[12] = 32'hfec42783;
+        // mem[13] = 32'h00f707b3;
+        // mem[14] = 32'h00a06813;
+        // mem[15] = 32'h00200893;
+        // mem[16] = 32'h011818b3;
+        // mem[17] = 32'h00300593;
+        // mem[18] = 32'h00b8f6b3;
+        // mem[19] = 32'hfff8c613;
+        // mem[20] = 32'h41088833;
+        // mem[21] = 32'h0038d893;
+        // mem[22] = 32'h00f766b3;
+        // mem[23] = 32'h01c12083;
+        // mem[24] = 32'h01812403;
+        // mem[25] = 32'h02010113;
+        // mem[26] = 32'h00a00893;
+        // mem[27] = 32'h00000073;

@@ -33,4 +33,8 @@ module RegisterFile(input	reset,
       end
     end
   end
+
+  // always @(rs1 or rs2 or rd_din or reg_write) begin
+  //   $display("RegisterFile rs1 %x rs2 %x rd_din %x reg_write %b", rs1, rs2, rd_din, reg_write);
+  // end
 endmodule
