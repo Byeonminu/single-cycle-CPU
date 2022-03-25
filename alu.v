@@ -4,14 +4,17 @@
 module ALU (input [31:0] alu_in_1,
 			input [31:0] alu_in_2,
 			input [3:0] alu_op,
-			output reg [31:0] alu_result,
-			output alu_bcond);
+			output reg signed [31:0] alu_result,
+			output [2:0] alu_bcond);
 
-	assign alu_bcond = (alu_result == 0) ? 1 : 0 ;
+	assign alu_bcond[0] = (alu_result == 0) ? 1 : 0 ; //beq bne bge
+	assign alu_bcond[1] = (alu_result < 0) ? 1 : 0; // blt
+	assign alu_bcond[2] = (alu_result > 0) ? 1 : 0; // bge
+
 
 always@(*) begin
 	
-	$display("ALU alu_op %b", alu_op);	
+	// $display("ALU alu_op %b", alu_op);	
 	case(alu_op)
 	4'b0000: alu_result = alu_in_1 & alu_in_2; // AND
 	4'b0001: alu_result = alu_in_1 | alu_in_2; // OR
@@ -22,7 +25,8 @@ always@(*) begin
 	4'b1000: alu_result = alu_in_1 >> alu_in_2; // srl
 	default: alu_result = {32{1'bx}};	
 	endcase
-
+	  $display("alu_result %x", alu_result );
+	
 /* `define FUNCT3_ADD      3'b000
 `define FUNCT3_SUB      3'b000
 `define FUNCT3_SLL      3'b001
@@ -86,9 +90,9 @@ always @(*) begin
 endcase
 end
 
-always @(part_of_inst) begin
-	$display("ALUControlUnit %x", part_of_inst);
-end
+// always @(part_of_inst) begin
+// 	$display("ALUControlUnit %x", part_of_inst);
+// end
 	
 
 endmodule

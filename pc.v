@@ -17,6 +17,7 @@ output reg [31: 0] current_pc;
         else begin
            
             current_pc <= next_pc;
+            
         end
     end
 endmodule
