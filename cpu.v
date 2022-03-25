@@ -80,9 +80,9 @@ module CPU(input reset,       // positive reset signal
                  .out(rd_din) );
   assign rd_din_mux1 = jump_pc;
   
-  always @(current_pc) begin
-    $display("current_pc %x --------------------------", current_pc);
-  end
+  // always @(current_pc) begin
+  //   $display("current_pc %x --------------------------", current_pc);
+  // end
   
   // branch
   wire alu_bcond_temp;
@@ -99,15 +99,15 @@ module CPU(input reset,       // positive reset signal
 
   assign next_pc = (is_jalr == 1) ? alu_result : ( (pc_src1 == 1) ? (imm_gen_out + current_pc) : jump_pc );
   
-  always @(pc_src1 or imm_gen_out) begin
-    $display("pc_src1 %b imm_gen_out %x", pc_src1, imm_gen_out);
+  // always @(pc_src1 or imm_gen_out) begin
+  //   $display("pc_src1 %b imm_gen_out %x", pc_src1, imm_gen_out);
     
-  end
+  // end
   
-  always @(alu_bcond) begin
-    $display("alu_bcond %b %b %b", alu_bcond[0], alu_bcond[1], alu_bcond[2]);
-    $display("alu_bcond_temp %b", alu_bcond_temp);
-  end
+  // always @(alu_bcond) begin
+  //   $display("alu_bcond %b %b %b", alu_bcond[0], alu_bcond[1], alu_bcond[2]);
+  //   $display("alu_bcond_temp %b", alu_bcond_temp);
+  // end
 
   // always @(mem_to_reg or read_data) begin
   //   $display("mem_to_reg %b read_data %x", mem_to_reg, read_data);
@@ -116,9 +116,9 @@ module CPU(input reset,       // positive reset signal
 
   assign is_halted = (reg_file.rf[17] == 10 & instruction[6:0] == 7'b1110011) ? 1 : 0;
  
-  always @(reg_file.rf[0]) begin
-    $display("reg_file.rf[17] is %x", reg_file.rf[17]);
-  end
+  // always @(reg_file.rf[0]) begin
+  //   $display("reg_file.rf[17] is %x", reg_file.rf[17]);
+  // end
   
 
   

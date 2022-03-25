@@ -31,7 +31,7 @@ module RegisterFile(input	reset,
       if(reg_write == 1) begin 
         if(rd != 0) 
         rf[rd] <= rd_din;
-        $display("register %x<= %x, rd = %d", rf[rd], rd_din, rd);
+        //$display("register %x<= %x, rd = %d", rf[rd], rd_din, rd);
       end
     end
   end

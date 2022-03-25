@@ -20,7 +20,7 @@ module InstMemory #(parameter MEM_DEPTH = 1024) (input reset,
       for (i = 0; i < MEM_DEPTH; i = i + 1)
           mem[i] = 32'b0;
       // Provide path of the file including instructions with binary format
-       $readmemh("basic_mem.txt", mem);
+       $readmemh("student_tb/basic_mem.txt", mem);
     end
   end
 
@@ -47,7 +47,7 @@ module DataMemory #(parameter MEM_DEPTH = 16384) (input reset,
   always @(*) begin
     if(mem_read == 1'b1) begin
       dout <= mem[dmem_addr];
-     $display("memory read %x <= %x",dout , mem[dmem_addr]);
+     //$display("memory read %x <= %x",dout , mem[dmem_addr]);
     end
   end
   
@@ -59,7 +59,7 @@ module DataMemory #(parameter MEM_DEPTH = 16384) (input reset,
     end
     else begin 
       if(mem_write == 1'b1) begin
-        $display("memory write %x(address) = %x",addr , din);
+        //$display("memory write %x(address) = %x",addr , din);
         mem[dmem_addr] = din;
          
       end

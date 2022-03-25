@@ -25,7 +25,7 @@ always@(*) begin
 	4'b1000: alu_result = alu_in_1 >> alu_in_2; // srl
 	default: alu_result = {32{1'bx}};	
 	endcase
-	  $display("alu_result %x", alu_result );
+	  //$display("alu_result %x", alu_result );
 	
 /* `define FUNCT3_ADD      3'b000
 `define FUNCT3_SUB      3'b000
