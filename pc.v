@@ -6,9 +6,7 @@ input reset;
 input [31: 0] next_pc;
 output reg [31: 0] current_pc;
 
-    initial begin
-        current_pc <= 32'b0;
-    end
+   
     always@(posedge clk) begin
         if(reset) begin
 

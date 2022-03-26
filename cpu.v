@@ -114,7 +114,7 @@ module CPU(input reset,       // positive reset signal
 
   // end
 
-  assign is_halted = (reg_file.rf[17] == 10 & instruction[6:0] == 7'b1110011) ? 1 : 0;
+  assign is_halted = (reg_file.rf[17] == 10 & instruction[6:0] == `ECALL) ? 1 : 0;
  
   // always @(reg_file.rf[0]) begin
   //   $display("reg_file.rf[17] is %x", reg_file.rf[17]);

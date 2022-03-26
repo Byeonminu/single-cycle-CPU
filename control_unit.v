@@ -15,6 +15,7 @@ case(part_of_inst[6:0])
 7'b0010011 : control <= 9'b101000000; // I-type
 7'b1100111 : control <= 9'b111xx0011; // jalr-type
 7'b1101111 : control <= 9'b111xx0101; // jal-type
+7'b1110011 : control <= 9'bxxxxx000x; // ecall
 default : control    <= 9'bxxxxxxxxx;
 endcase
 
