@@ -66,26 +66,26 @@ end
 
 always @(*) begin
 	case(aluop)
-		2'b00 : alu_op <= 4'b0010;
-		2'b01 : alu_op <= 4'b0110; 
+		2'b00 : alu_op = 4'b0010;
+		2'b01 : alu_op = 4'b0110; 
 		2'b10 : case({inst30,funct3})
-		4'b0000 : alu_op <= 4'b0010; // add
-		4'b1000 : alu_op <= 4'b0110; // sub
-		4'b0111 : alu_op <= 4'b0000; // and
-		4'b0110 : alu_op <= 4'b0001; // or
-		4'b0001 : alu_op <= 4'b0011; // sll
-		4'b0100 : alu_op <= 4'b0111; // xor
-		4'b0101 : alu_op <= 4'b1000; // srl
-		default : alu_op <= 4'bxxxx;
+		4'b0000 : alu_op = 4'b0010; // add
+		4'b1000 : alu_op = 4'b0110; // sub
+		4'b0111 : alu_op = 4'b0000; // and
+		4'b0110 : alu_op = 4'b0001; // or
+		4'b0001 : alu_op = 4'b0011; // sll
+		4'b0100 : alu_op = 4'b0111; // xor
+		4'b0101 : alu_op = 4'b1000; // srl
+		default : alu_op = 4'bxxxx;
 		endcase
 		2'b11 : case(funct3) 
-		3'b000 : alu_op <= 4'b0010; // addi
-		3'b100 : alu_op <= 4'b0111; // xori
-		3'b110 : alu_op <= 4'b0001; // ori
-		3'b111 : alu_op <= 4'b0000; // andi
-		3'b001 : alu_op <= 4'b0011; // slli
-		3'b101 : alu_op <= 4'b1000; // srli
-		default : alu_op <= 4'bxxxx;
+		3'b000 : alu_op = 4'b0010; // addi
+		3'b100 : alu_op = 4'b0111; // xori
+		3'b110 : alu_op = 4'b0001; // ori
+		3'b111 : alu_op = 4'b0000; // andi
+		3'b001 : alu_op = 4'b0011; // slli
+		3'b101 : alu_op = 4'b1000; // srli
+		default : alu_op = 4'bxxxx;
 	endcase
 endcase
 end

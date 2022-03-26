@@ -10,19 +10,19 @@ module ImmediateGenerator (input [31:0] part_of_inst,
 
 always @(*) begin
 case(part_of_inst[6:0])
-`JAL: imm_gen_out <= {{11{part_of_inst[31]}},part_of_inst[31],part_of_inst[19:12],part_of_inst[20],part_of_inst[30:21], 1'b0};
-`JALR: imm_gen_out <= {{20{part_of_inst[31]}},part_of_inst[31:20]};
-`BEQ: imm_gen_out <= {{19{part_of_inst[31]}},part_of_inst[31],part_of_inst[7],part_of_inst[30:25],part_of_inst[11:8],1'b0};
-`BNE: imm_gen_out <= {{19{part_of_inst[31]}},part_of_inst[31],part_of_inst[7],part_of_inst[30:25],part_of_inst[11:8],1'b0};
-`BLT: imm_gen_out <= {{19{part_of_inst[31]}},part_of_inst[31],part_of_inst[7],part_of_inst[30:25],part_of_inst[11:8],1'b0 };
-`BGE: imm_gen_out <= {{19{part_of_inst[31]}},part_of_inst[31],part_of_inst[7],part_of_inst[30:25],part_of_inst[11:8],1'b0};
-`LW: imm_gen_out <= {{20{part_of_inst[31]}},part_of_inst[31:20]};
-`SW: imm_gen_out <= {{20{part_of_inst[31]}},part_of_inst[31:25],part_of_inst[11:7]};
-`ADDI: imm_gen_out <= {{20{part_of_inst[31]}},part_of_inst[31:20]};
-`XORI: imm_gen_out <= {{20{part_of_inst[31]}},part_of_inst[31:20]};
-`ORI: imm_gen_out <= {{20{part_of_inst[31]}},part_of_inst[31:20]};
-`ANDI: imm_gen_out <= {{20{part_of_inst[31]}},part_of_inst[31:20]};
-default : imm_gen_out <= {32{1'hx}}; // ADD, SUB, SLL, XOR, SRL, OR, AND
+`JAL: imm_gen_out = {{11{part_of_inst[31]}},part_of_inst[31],part_of_inst[19:12],part_of_inst[20],part_of_inst[30:21], 1'b0};
+`JALR: imm_gen_out = {{20{part_of_inst[31]}},part_of_inst[31:20]};
+`BEQ: imm_gen_out = {{19{part_of_inst[31]}},part_of_inst[31],part_of_inst[7],part_of_inst[30:25],part_of_inst[11:8],1'b0};
+`BNE: imm_gen_out = {{19{part_of_inst[31]}},part_of_inst[31],part_of_inst[7],part_of_inst[30:25],part_of_inst[11:8],1'b0};
+`BLT: imm_gen_out = {{19{part_of_inst[31]}},part_of_inst[31],part_of_inst[7],part_of_inst[30:25],part_of_inst[11:8],1'b0 };
+`BGE: imm_gen_out = {{19{part_of_inst[31]}},part_of_inst[31],part_of_inst[7],part_of_inst[30:25],part_of_inst[11:8],1'b0};
+`LW: imm_gen_out = {{20{part_of_inst[31]}},part_of_inst[31:20]};
+`SW: imm_gen_out = {{20{part_of_inst[31]}},part_of_inst[31:25],part_of_inst[11:7]};
+`ADDI: imm_gen_out = {{20{part_of_inst[31]}},part_of_inst[31:20]};
+`XORI: imm_gen_out = {{20{part_of_inst[31]}},part_of_inst[31:20]};
+`ORI: imm_gen_out = {{20{part_of_inst[31]}},part_of_inst[31:20]};
+`ANDI: imm_gen_out = {{20{part_of_inst[31]}},part_of_inst[31:20]};
+default : imm_gen_out = {32{1'hx}}; // ADD, SUB, SLL, XOR, SRL, OR, AND
 
 
 endcase
